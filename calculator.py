@@ -15,7 +15,7 @@ calculator.resizable(width=False, height=False) #fixed 1st bug
 #menu
 menubar = Menu(calculator)
 filemenu = Menu(menubar, tearoff = 0)
-filemenu.add_command(label = "About", command = lambda: messagebox.showwarning("About", "A simple calculator application made for fun and practice with Python 3.5.2 using the Tkinter module for GUI programming. \nAuthor: Leo Hajder (github.com/lhajder)"))
+filemenu.add_command(label = "About", command = lambda: messagebox.showinfo("About", "A simple calculator application made for fun and practice with Python 3.5.2 using the Tkinter module for GUI programming. \nAuthor: Leo Hajder (leohajder.github.io)"))
 filemenu.add_separator()
 filemenu.add_command(label = "Exit", command = calculator.destroy)
 menubar.add_cascade(label = "File", menu = filemenu)
@@ -45,7 +45,8 @@ def click(key):
 def result():
     global storeBuffer, storeMemory, storeOperator, displayText
     try:
-        storeMemory = eval(str(float(storeMemory)) + str(storeOperator) + str(float((storeBuffer) or 0))) #or 0 --> if storeBuffer is empty string, treat it as 0 when calculating
+        if(storeBuffer != ""): #fixed bug: prevent clear if 2 operators clicked in a row
+            storeMemory = eval(str(float(storeMemory)) + str(storeOperator) + str(float(storeBuffer)))
         if(storeMemory == int(storeMemory)):
             storeMemory = int(storeMemory) #just to remove the decimal point from the screen if it's not needed
         displayText.set((str(storeMemory)))
@@ -81,6 +82,15 @@ def key(event):
         clear()
 
 calculator.bind("<Key>", key)
+
+#menu
+menubar = Menu(calculator)
+filemenu = Menu(menubar, tearoff = 0)
+filemenu.add_command(label = "About", command = lambda: messagebox.showwarning("About", "A simple calculator application made for fun and practice with Python 3.5.2 using the Tkinter module for GUI programming. \nAuthor: Leo Hajder (github.com/lhajder)"))
+filemenu.add_separator()
+filemenu.add_command(label = "Exit", command = calculator.destroy)
+menubar.add_cascade(label = "File", menu = filemenu)
+calculator.config(menu=menubar)
 
 #gui elements
 display = Entry(calculator, state = DISABLED, justify = RIGHT, bd = 2, disabledbackground = "pale green", textvariable = displayText).grid(row = 0, column = 0, columnspan = 4, ipadx = 5, ipady = 5, padx =5, pady = 5)
