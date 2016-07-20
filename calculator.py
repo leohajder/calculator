@@ -9,6 +9,8 @@ from tkinter import *
 
 #initialization
 calculator = Tk()
+calculator.title("Calculator")
+calculator.resizable(width=False, height=False) #fixed 1st bug
 
 #menu
 menubar = Menu(calculator)
@@ -58,7 +60,28 @@ def clear():
     storeMemory = 0
     storeOperator = "+"
     result()
-    
+
+#key binding
+def key(event):
+    if(event.keysym == "Return"):
+        click("=")
+    elif(event.keysym == "plus"):
+        click("+")
+    elif(event.keysym == "minus"):
+        click("-")
+    elif(event.keysym == "asterisk"):
+        click("*")
+    elif(event.keysym == "slash"):
+        click("/")
+    elif(event.keysym == "comma"):
+        click(".")
+    elif(event.keysym.isdigit()):
+        click(event.keysym)
+    elif(event.keysym in ["c", "Escape"]):
+        clear()
+
+calculator.bind("<Key>", key)
+
 #gui elements
 display = Entry(calculator, state = DISABLED, justify = RIGHT, bd = 2, disabledbackground = "pale green", textvariable = displayText).grid(row = 0, column = 0, columnspan = 4, ipadx = 5, ipady = 5, padx =5, pady = 5)
 btnClear = Button(calculator, text = "C", command = lambda: clear(), bg = "indian red", fg = "white").grid(row = 1, column = 0, ipadx = 5)
@@ -75,10 +98,12 @@ btn6 = Button(calculator, text = "6", command = lambda: click("6")).grid(row = 3
 btn1 = Button(calculator, text = "1", command = lambda: click("1")).grid(row = 4, column = 0, ipadx = 5, pady = 2)
 btn2 = Button(calculator, text = "2", command = lambda: click("2")).grid(row = 4, column = 1, ipadx = 5, pady = 2)
 btn3 = Button(calculator, text = "3", command = lambda: click("3")).grid(row = 4, column = 2, ipadx = 5, pady = 2)
-btnEquals = Button(calculator, text = " = ", command = lambda: click("="), bg = "light blue", fg = "white", height = 1, width = 1).grid(row = 4, column = 3, rowspan = 2, ipadx = 5, ipady = 14)
+btnEquals = Button(calculator, text = "=", command = lambda: click("="), bg = "light blue", fg = "white", height = 1, width = 1).grid(row = 4, column = 3, rowspan = 2, ipadx = 5, ipady = 14)
 btn0 = Button(calculator, text = "0", command = lambda: click("0")).grid(row = 5, column = 0, columnspan = 2, ipadx = 20, pady = 2)
 btnDecimal = Button(calculator, text = ",", command = lambda: click(".")).grid(row = 5, column = 2, ipadx = 7, pady = 2)
 
 clear() #setup on load
+
+calculator.focus_force()
 
 calculator.mainloop()
